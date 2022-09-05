@@ -14,4 +14,19 @@ export class NotesService {
     const note = await this.notesRepository.create(data);
     return await this.notesRepository.save(note);
   }
+
+  async getNoteById(noteId: string) {
+    console.log(noteId);
+    const note = await this.notesRepository.findOne({
+      where: { id: noteId },
+    });
+    return note;
+  }
+
+  async getUserNotes(userId: string) {
+    const notes = await this.notesRepository.find({
+      where: { userId: userId },
+    });
+    return notes;
+  }
 }
