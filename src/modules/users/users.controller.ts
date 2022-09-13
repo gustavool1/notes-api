@@ -1,18 +1,26 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import UserDto from './dtos';
-import { User } from './entities/users.entitie';
 import { UserService } from './users.service';
 
-@Controller('users')
+export class IUser {
+  email: string;
+  password: string;
+  name: string;
+}
+export class IAuthUser {
+  email: string;
+  password?: string;
+  token?: string;
+}
+@Controller('user')
 export class UserController {
-  constructor(
-    @InjectRepository(User)
-    private userService: UserService,
-  ) {}
+  constructor(private usersService: UserService) {}
 
   @Post()
-  async create(@Body() data: UserDto) {
-    return this.userService.create(data);
+  async create(@Body() data: IUser) {
+    return this.usersService.create(data);
+  }
+  @Post('/auth')
+  async auth(@Body() data: IAuthUser) {
+    return await this.usersService.auth(data);
   }
 }
